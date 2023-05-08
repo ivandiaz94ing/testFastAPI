@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import math
 
 from masseis import masseis
+from esPrimo import is_prime
 app = FastAPI()
 
 def test_primera():
@@ -19,16 +20,13 @@ def read_root():
 @app.get("/hello")   
 def hello():
     return {"Hello": "FastAPI"}
-
-@app.get("/IsPrime")   
-def esPrimo(numero):
-    if numero < 2:
-        return "False"
-    for i in range(2, numero):
-        if numero % i == 0:
-            return "False"
-    return "True"
-
+ 
+@app.get("/is_prime/{number}")
+async def check_if_prime(number: int):
+    if is_prime(number):
+        return {"number": number, "is_prime": True}
+    else:
+        return {"number": number, "is_prime": False}
 
 
 @app.get("/items/{item_id}")
